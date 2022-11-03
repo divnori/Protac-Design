@@ -29,7 +29,7 @@ conda install pandas scipy
 [TODO add when camera-ready version live]
 
 ## Additional data
-Additional data, including saved GraphINVENT model states, generated structures, and training data, are available at [this](https://doi.org/10.5281/zenodo.7278277) Zenodo link.
+Additional data, including saved GraphINVENT model states, generated structures, analysis scripts, and training data, are available on Zenodo [here](https://doi.org/10.5281/zenodo.7278277).
 
 ## Authors
 * Divya Nori
