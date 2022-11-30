@@ -604,27 +604,36 @@ class Workflow:
         self.prior_model.eval()
         self.basf_model.eval()
 
-        # genereate molecules with agent model
-        loss_a, score_a = self.generate_graphs_rl(model_a=self.agent_model,
-                                                  model_b=self.prior_model,
-                                                  tb_writer=self.analyzer.tb_writer,
-                                                  is_agent=True,
-                                                  model_a_label="agent")
+        for i in range(1):
 
-        # generate molecules with best agent so far ("basf")
-        loss_b, _ = self.generate_graphs_rl(model_a=self.basf_model,
-                                            model_b=self.agent_model,
-                                            tb_writer=self.analyzer.tb_writer,
-                                            is_agent=True,
-                                            model_a_label="BASF")
+            # generate molecules with agent model
+            loss_a, score_a = self.generate_graphs_rl(model_a=self.agent_model,
+                                                    model_b=self.prior_model,
+                                                    tb_writer=self.analyzer.tb_writer,
+                                                    is_agent=True,
+                                                    model_a_label="agent")
 
-        loss = (
-            (1 - self.constants.alpha) * loss_a + self.constants.alpha * loss_b
-        )
+            # generate molecules with best agent so far ("basf")
+            loss_b, _ = self.generate_graphs_rl(model_a=self.basf_model,
+                                                model_b=self.agent_model,
+                                                tb_writer=self.analyzer.tb_writer,
+                                                is_agent=True,
+                                                model_a_label="BASF")
 
-        # backpropagate
-        loss.backward()
+            print(f"* loss_a {loss_a}.", flush=True)
+            print(f"* loss_b {loss_b}.", flush=True)
+
+            loss = (
+                (1 - self.constants.alpha) * loss_a + self.constants.alpha * loss_b
+            )
+
+            # backpropagate
+            loss.backward()
+
+
+
         self.optimizer.step()
+
 
         # update the learning rate
         self.scheduler.step()
@@ -751,6 +760,9 @@ class Workflow:
          termination) = generator.sample(agent_model=model_a,
                                          prior_model=model_b)
 
+        print(f"* model a log likelihood {model_a_loglikelihoods}.", flush=True)
+        print(f"* model b log likelihood {model_b_loglikelihoods}.", flush=True)
+
         # analyze properties of new graphs and save results
         validity, uniqueness = self.analyzer.evaluate_generated_graphs_rl(
             generated_graphs=graphs,
@@ -780,6 +792,9 @@ class Workflow:
                                      uniqueness,
                                      torch.zeros(len(scores),
                                      device=self.constants.device))
+
+        print(f"* scores {scores}.", flush=True)
+        print(f"* uniqueness {uniqueness}.", flush=True)
 
         loss_component = torch.mean(
             self.compute_loss_component(
@@ -930,5 +945,11 @@ class Workflow:
         loss       = difference * difference
         mask       = (uniqueness != 0).int()
         loss       = loss * mask
+
+        print(f"* agent_loglikelihoods {agent_loglikelihoods}.", flush=True)
+        print(f"* prior_loglikelihoods {prior_loglikelihoods}.", flush=True)
+        print(f"* augmented_prior_loglikelihoods {augmented_prior_loglikelihoods}.", flush=True)
+        print(f"* difference {difference}.", flush=True)
+        print(f"* compute_loss_component {loss}.", flush=True)
 
         return loss

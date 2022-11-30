@@ -261,9 +261,9 @@ def collect_global_constants(parameters : dict, job_dir : str) -> namedtuple:
         #         activity_model                                 = model_dict["classifier_sv"]
         #         constants_dict["qsar_models"][qsar_model_name] = activity_model
         print("-- Loading pre-trained gbm activity model.", flush=True)
-        scoring_model_activity = pickle.load(open('/home/gridsan/dnori/GraphINVENT/data/protac_scoring_models/Protac_Scoring_Model_1024_100nM.pkl', 'rb'))
+        scoring_model_activity = pickle.load(open('/home/gridsan/dnori/GraphINVENT/data/protac_scoring_models/model_brd4.pkl', 'rb'))
         scoring_model_structure = pickle.load(open('/home/gridsan/dnori/GraphINVENT/data/protac_scoring_models/Protac_Scoring_Model_Structure.pkl', 'rb'))
-        with open('/home/gridsan/dnori/GraphINVENT/data/protac_scoring_models/features_1024_100nM.pkl','rb') as fp:
+        with open('/home/gridsan/dnori/GraphINVENT/data/protac_scoring_models/features_brd4.pkl','rb') as fp:
             features_activity = pickle.load(fp)
         with open('/home/gridsan/dnori/GraphINVENT/data/protac_scoring_models/features_structure.pkl','rb') as fp:
             features_structure = pickle.load(fp)
