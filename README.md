@@ -26,7 +26,7 @@ conda install pandas scipy
 
 
 ## Citation
-[TODO add when camera-ready version live]
+Nori, Divya et al. (2022) "De novo PROTAC design using graph-based deep generative models." NeurIPS 2022 AI4Science Workshop.
 
 ## Additional data
 Additional data, including saved GraphINVENT model states, generated structures, analysis scripts, and training data, are available on Zenodo [here](https://doi.org/10.5281/zenodo.7278277).
