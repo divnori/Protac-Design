@@ -1,6 +1,6 @@
 # Protac-Design
 ## Description
-This repo contains the code behind our workshop paper at the NeurIPS 2022 AI4Science Workshop, [TODO add link to camera-ready version when live]. It is organized into the following notebooks:
+This repo contains the code behind our workshop paper at the NeurIPS 2022 AI4Science Workshop, [Link to Paper](https://openreview.net/pdf?id=pGyp4o9gky0). It is organized into the following notebooks:
 
 * [surrogate_model.ipynb](./surrogate_model.ipynb): Contains the code for processing the raw PROTAC data and training the DC<sub>50</sub> surrogate model. Note that you will need to download the public PROTAC data from [PROTAC-DB](http://cadd.zju.edu.cn/protacdb/downloads) in order to reproduce the results.
 * [molecule_metrics.ipynb](./molecule_metrics.ipynb): Contains code for computing metrics on a set of generated molecules. Metrics include percentage predicted active, percentage of duplicate molecules, percentage of molecules regenerated from training set, average number of atoms, chemical diversity, and drug-likeness.
