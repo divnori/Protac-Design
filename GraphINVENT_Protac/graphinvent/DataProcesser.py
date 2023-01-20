@@ -93,7 +93,7 @@ class DataProcesser:
 
             # this is where we fill the datasets with actual data by looping
             # over subgraphs in blocks of size `constants.batch_size`
-            for idx in range(0, self.total_n_subgraphs, constants.batch_size):
+            for idx in tqdm(range(0, self.total_n_subgraphs, constants.batch_size)):
 
                 if not self.skip_collection:
 
