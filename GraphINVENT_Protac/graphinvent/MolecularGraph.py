@@ -242,7 +242,7 @@ class MolecularGraph:
             dtype=np.int32
         )
 
-        print('built node and feature arrays in mol_to_graph()')
+        # print('built node and feature arrays in mol_to_graph()')
 
         for bond in molecule.GetBonds():
             i = bond.GetBeginAtomIdx()
@@ -251,7 +251,7 @@ class MolecularGraph:
             edge_features[i, j, bond_type] = 1
             edge_features[j, i, bond_type] = 1
 
-        print("done with loop in mol_to_graph()")
+        # print("done with loop in mol_to_graph()")
 
         # define the number of nodes
         self.n_nodes = n_atoms
@@ -270,36 +270,36 @@ class PreprocessingGraph(MolecularGraph):
                  molecule : rdkit.Chem.Mol) -> None:
         super().__init__(constants, molecule=False, node_features=False,
                          edge_features=False, atom_feature_vector=False)
-        print("ran super init in PreprocessingGraph init")
+        # print("ran super init in PreprocessingGraph init")
 
         # define values previously set to `None` or undefined
         self.node_ordering = None  # to be defined in `self.node_remap()`
 
-        print("set node order in PreprocessingGraph init")
+        # print("set node order in PreprocessingGraph init")
 
         if self.constants.use_explicit_H and not self.constants.ignore_H:
             molecule = rdkit.Chem.AddHs(molecule)
 
-        print("added H's in PreprocessingGraph init")
+        # print("added H's in PreprocessingGraph init")
 
         self.n_nodes = molecule.GetNumAtoms()
 
-        print("got num nodes in PreprocessingGraph init")
+        # print("got num nodes in PreprocessingGraph init")
 
         # get the graph attributes from the `rdkit.Chem.Mol()` object
         self.mol_to_graph(molecule=molecule)
 
-        print("got graph attributes in PreprocessingGraph init")
+        # print("got graph attributes in PreprocessingGraph init")
 
         # remap the nodes using either a canonical or random node ordering
         self.node_remap(molecule=molecule)
 
-        print("remapped nodes in PreprocessingGraph init")
+        # print("remapped nodes in PreprocessingGraph init")
 
         # pad up to size of largest graph in dataset (`self.constants.max_n_nodes`)
         self.pad_graph_representation()
 
-        print("padded graph rep in PreprocessingGraph init")
+        # print("padded graph rep in PreprocessingGraph init")
 
     def atom_features(self, atom : rdkit.Chem.Atom) -> np.ndarray:
         """
@@ -461,12 +461,12 @@ class PreprocessingGraph(MolecularGraph):
             atom_ranking = list(range(self.n_nodes))
             random.shuffle(atom_ranking)
         else:
-            print('canon set to True')
+            # print('canon set to True')
             # get RDKit canonical ranking
             atom_ranking = list(
                 rdkit.Chem.CanonicalRankAtoms(molecule, breakTies=True)
             )
-            print('got atom ranking in node_remap()')
+            # print('got atom ranking in node_remap()')
 
         # using a random node as a starting point, get a new node ranking that
         # does not leave isolated fragments in graph traversal
@@ -708,7 +708,7 @@ class PreprocessingGraph(MolecularGraph):
             n_decoding_graphs (int) : Number of subgraphs in the input graph's
                                       decoding route.
         """
-        print("getting decoding route length",flush=True)
+        # print("getting decoding route length",flush=True)
         return int(self.get_n_edges() + 2)
 
     def get_decoding_route_state(self, subgraph_idx : int) -> \
