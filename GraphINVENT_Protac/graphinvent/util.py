@@ -216,8 +216,8 @@ def load_ts_properties(csv_path : str) -> dict:
     for key, value in csv_dict.items():
 
         # first determine if key is a tuple
-        key = eval(key)
-        if len(key) > 1:
+        # key = eval(key)
+        if isinstance(key, tuple):
             tuple_key = (str(key[0]), str(key[1]))
         else:
             tuple_key = key

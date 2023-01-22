@@ -36,12 +36,15 @@ from parameters.constants import constants
 from torch.utils.tensorboard import SummaryWriter
 
 #take a random subset of 10000 smiles
-orig_smi_file_path = str('data/pre-training/protac_db_subset_50/orig.smi')
+orig_smi_file_path = str('data/pre-training/MOSES/train.smi')
 list_of_smiles = []
 with open(orig_smi_file_path, 'r') as f:
     for line in f.readlines():
         words = line.split()
         list_of_smiles.append(words[0])
+
+# The first entry in list_of_smiles is 'SMILES', not a SMILES string
+list_of_smiles.pop(0)
 
 train_smiles = list_of_smiles[:92]
 test_smiles = list_of_smiles[92:109]
@@ -59,13 +62,14 @@ with open('data/pre-training/protac_db_subset_50/valid.smi', 'w+') as f:
 
 
 #convert smiles to molecular graphs
-mols = [Chem.MolFromSmiles(smi) for smi in subset_of_smiles]
-processor = DataProcesser(path = 'data/pre-training/MOSES/train_subset.smi', is_training_set=True, molset = mols)
+mols = [Chem.MolFromSmiles(smi) for smi in list_of_smiles]
+processor = DataProcesser(path = 'data/pre-training/MOSES/train.smi', is_training_set=True, molset = mols)
 graphs = [processor.get_graph(mol) for mol in mols]
 
 processor.get_ts_properties(molecular_graphs=graphs, group_size=10000)
 print(processor.ts_properties)
 
 #writecsv (from util.py)
-# writer = SummaryWriter()
-# util.properties_to_csv(processor.ts_properties, 'data/pre-training/MOSES/train.csv', 'Training set', writer)
+# Uncomment to write train.csv
+writer = SummaryWriter()
+util.properties_to_csv(processor.ts_properties, 'data/pre-training/MOSES/train.csv', 'Training set', writer)

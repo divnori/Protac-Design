@@ -93,7 +93,7 @@ class DataProcesser:
 
             # this is where we fill the datasets with actual data by looping
             # over subgraphs in blocks of size `constants.batch_size`
-            for idx in range(0, self.total_n_subgraphs, constants.batch_size):
+            for idx in tqdm(range(0, self.total_n_subgraphs, constants.batch_size)):
 
                 if not self.skip_collection:
 
@@ -193,7 +193,6 @@ class DataProcesser:
         data_subgraphs, data_apds, molecular_graph_list = [], [], []  # initialize
 
         # convert all molecules in `self.molecules_subset` to `PreprocessingGraphs`
-        molecular_graph_generator = map(self.get_graph, self.molecule_subset)
         molecular_graph_generator = map(self.get_graph, self.molecule_set)
 
         molecules_processed       = 0  # keep track of the number of molecules processed
@@ -480,6 +479,11 @@ class DataProcesser:
         end_idx = init_idx + group_size  # idx to end slicing
 
         # once data is padded, save it to dataset slice
-        self.dataset["nodes"][init_idx:end_idx] = nodes
-        self.dataset["edges"][init_idx:end_idx] = edges
-        self.dataset["APDs"][init_idx:end_idx]  = apds
+        # Broadcasting errors happen in the final group,
+        # this skips them so processing can proceed
+        try:
+          self.dataset["nodes"][init_idx:end_idx] = nodes
+          self.dataset["edges"][init_idx:end_idx] = edges
+          self.dataset["APDs"][init_idx:end_idx]  = apds
+        except:
+          print("\nBroadcasting error, skipping.\n")
